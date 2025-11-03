@@ -10,18 +10,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
-    
+
     <meta name="theme-color" content="#1c1b2a">
-
     <link rel="manifest" href="manifest.json">
-
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <style>
         :root {
             --bg-dark: #100f1c; /* Fondo principal */
-            --bg-card: #1c1b2a; /* Fondo de tarjetas */
+            --bg-card: rgba(28, 27, 42, 0.85); /* Fondo de tarjetas con 85% opacidad */
             --accent-purple: #a955f7; /* Púrpura brillante */
             --accent-light: #c77dff; /* Púrpura claro */
             --text-primary: #ffffff;
@@ -29,90 +27,61 @@
             --border-color: #3a394a;
         }
         
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
+
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
+            
+            /* --- NUEVO FONDO LÍQUIDO --- */
+            background-image: url('images/background-pattern.png');
+            background-size: cover; /* Cubre toda la pantalla */
+            background-position: center center; /* Centra la imagen */
+            background-repeat: no-repeat; /* No se repite */
+            background-attachment: fixed; /* ¡Importante! El fondo se queda fijo al hacer scroll */
+            background-color: var(--bg-dark); /* Color de reserva si la imagen falla */
+            /* --- FIN DEL FONDO --- */
+            
             color: var(--text-primary);
             min-height: 100vh;
         }
 
         /* --- Encabezado --- */
-        header {
-            text-align: center;
-            padding: 2rem 1rem;
-        }
-
+        header { text-align: center; padding: 2rem 1rem; }
         header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            color: var(--accent-purple);
+            margin: 0; font-size: 2.5rem; color: var(--accent-purple);
             text-shadow: 0 0 10px rgba(169, 85, 247, 0.5);
         }
 
         /* --- Contenedor Principal --- */
-        main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem;
-        }
+        main { max-width: 1200px; margin: 0 auto; padding: 1rem; }
 
         /* --- Sección de Búsqueda --- */
-        .search-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 3rem;
-        }
-
+        .search-container { display: flex; justify-content: center; margin-bottom: 3rem; }
         #search-input {
-            width: 70%;
-            max-width: 500px;
-            padding: 1rem;
-            font-size: 1.1rem;
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            border-radius: 50px 0 0 50px;
-            outline: none;
+            width: 70%; max-width: 500px; padding: 1rem;
+            font-size: 1.1rem; background-color: var(--bg-card);
+            border: 1px solid var(--border-color); color: var(--text-primary);
+            border-radius: 50px 0 0 50px; outline: none;
             transition: all 0.2s ease;
         }
-
         #search-input:focus {
             border-color: var(--accent-purple);
-            box-shadow: 0 0 15px rgba(169, 85, 247, 0.5);
-            z-index: 1;
+            box-shadow: 0 0 15px rgba(169, 85, 247, 0.5); z-index: 1;
         }
-
         #search-button {
-            padding: 1rem 1.5rem;
-            font-size: 1.1rem;
-            border: none;
-            background-color: var(--accent-purple);
-            color: white;
-            cursor: pointer;
-            border-radius: 0 50px 50px 0;
-            transition: background-color 0.2s ease;
-            margin-left: -1px;
+            padding: 1rem 1.5rem; font-size: 1.1rem; border: none;
+            background-color: var(--accent-purple); color: white;
+            cursor: pointer; border-radius: 0 50px 50px 0;
+            transition: background-color 0.2s ease; margin-left: -1px;
         }
-
-        #search-button:hover {
-            background-color: var(--accent-light);
-        }
+        #search-button:hover { background-color: var(--accent-light); }
 
         /* --- Animación de Carga --- */
         #loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 255, 255, 0.2);
-            border-top-color: var(--accent-purple);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 3rem auto;
+            width: 50px; height: 50px; border: 5px solid rgba(255, 255, 255, 0.2);
+            border-top-color: var(--accent-purple); border-radius: 50%;
+            animation: spin 1s linear infinite; margin: 3rem auto;
         }
         .hidden { display: none; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -125,137 +94,145 @@
             gap: 2rem;
         }
 
-        /* --- NUEVO: WRAPPER PARA TARJETA PRINCIPAL + TARJETA DE RATINGS --- */
-        .result-wrapper {
-            display: flex;
-            gap: 1.5rem; /* Espacio entre las dos tarjetas */
-            width: 100%;
-            max-width: 900px; /* Ancho máximo para el conjunto */
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-radius: 16px;
-        }
-        .result-wrapper:hover {
-             transform: translateY(-5px);
-             box-shadow: 0 5px 35px rgba(169, 85, 247, 0.25);
-        }
-
-        /* --- TARJETA DE RESULTADO PRINCIPAL --- */
+        /* --- TARJETA DE RESULTADO ÚNICA --- */
         .result-card {
             display: flex;
-            width: 70%; /* Ocupa la mayor parte del espacio */
+            width: 100%;
+            max-width: 750px; /* Tarjeta ancha */
             background-color: var(--bg-card);
             border-radius: 16px;
             border: 1px solid var(--border-color);
             overflow: hidden;
             box-shadow: 0 0 25px rgba(169, 85, 247, 0.1);
-            position: relative; /* Para el ::after si se quisiera añadir */
+            transition: all 0.3s ease;
+        }
+        .result-card, #search-input, .status-message {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px); /* Para compatibilidad con Safari */
+        }
+        .result-card:hover {
+             transform: translateY(-5px);
+             box-shadow: 0 5px 35px rgba(169, 85, 247, 0.25);
         }
         
         .card-poster img {
-            width: 185px;
-            height: 100%;
-            object-fit: cover;
-            display: block;
+            width: 185px; height: 100%;
+            object-fit: cover; display: block;
         }
 
         .card-info {
-            flex-grow: 1;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
+            flex-grow: 1; padding: 1.5rem;
+            display: flex; flex-direction: column;
         }
 
         .card-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: flex-start; /* Alineado arriba */
             gap: 1rem;
             margin-bottom: 0.5rem;
         }
 
         .card-header h2 {
-            margin: 0;
-            font-size: 1.75rem;
-            line-height: 1.2;
+            margin: 0; font-size: 1.75rem;
+            line-height: 1.2; flex-grow: 1;
         }
         
         .card-meta {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            margin-bottom: 1.5rem;
+            display: flex; gap: 1rem;
+            align-items: center; margin-bottom: 0.5rem;
         }
-
-        .result-card .year {
-            font-size: 1rem;
-            color: var(--text-muted);
-        }
-
+        .result-card .year { font-size: 1rem; color: var(--text-muted); }
         .info-badge {
             background-color: rgba(169, 85, 247, 0.15);
-            color: var(--accent-light);
-            border: 1px solid var(--accent-purple);
-            padding: 0.3rem 0.6rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
+            color: var(--accent-light); border: 1px solid var(--accent-purple);
+            padding: 0.3rem 0.6rem; border-radius: 20px;
+            font-size: 0.8rem; font-weight: bold;
         }
 
+        /* Círculo de Puntuación */
+        .score-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            position: relative; flex-shrink: 0;
+        }
+        .score-circle::before {
+            content: ''; position: absolute;
+            width: 40px; height: 40px;
+            background-color: var(--bg-card);
+            border-radius: 50%;
+        }
+        .score-text {
+            position: relative; z-index: 1;
+            font-size: 0.9rem; font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        /* Conteo de Votos */
+        .vote-count {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+        
         .result-card h3 {
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: var(--accent-light);
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 0.9rem; font-weight: 700;
+            color: var(--accent-light); margin-bottom: 1rem;
+            text-transform: uppercase; letter-spacing: 0.5px;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 0.5rem;
         }
         
-        /* --- Plataformas --- */
+        /* Plataformas */
         .platforms {
-            display: flex;
-            flex-wrap: wrap;
+            display: flex; flex-wrap: wrap;
             gap: 1rem;
-            margin-top: auto;
-            padding-top: 1rem;
         }
-
         .platform-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 70px;
-            text-align: center;
+            display: flex; flex-direction: column;
+            align-items: center; width: 70px; text-align: center;
         }
-
         .platform-icon-container {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            width: 40px; height: 40px; border-radius: 50%;
             background-color: rgba(169, 85, 247, 0.1);
             border: 1px solid var(--accent-purple);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 0.5rem;
-            transition: all 0.2s ease;
+            display: flex; justify-content: center; align-items: center;
+            margin-bottom: 0.5rem; transition: all 0.2s ease;
         }
         .platform-item:hover .platform-icon-container {
             background-color: rgba(169, 85, 247, 0.2);
             box-shadow: 0 0 10px rgba(169, 85, 247, 0.5);
         }
+        .platform-icon { font-size: 1.25rem; color: var(--accent-light); }
+        .platform-name { font-size: 0.7rem; color: var(--text-muted); line-height: 1.2; }
 
-        .platform-icon {
-            font-size: 1.25rem;
-            color: var(--accent-light);
+        /* Botones de IMDB y Rotten Tomatoes */
+        .rating-buttons {
+            display: flex;
+            flex-direction: row;
+            gap: 0.8rem;
+            width: 100%;
+            margin-top: auto; /* Empuja al fondo */
+            padding-top: 1.5rem;
         }
-
-        .platform-name {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            line-height: 1.2;
+        .rating-button {
+            display: flex; align-items: center; justify-content: center;
+            flex-grow: 1;
+            padding: 0.8rem 1rem;
+            background-color: var(--border-color);
+            color: var(--text-primary); border: none;
+            border-radius: 8px; font-size: 0.9rem;
+            font-weight: 700; text-decoration: none;
+            transition: all 0.2s ease; gap: 0.5rem;
         }
+        .rating-button:hover {
+            background-color: var(--accent-purple);
+            box-shadow: 0 0 15px rgba(169, 85, 247, 0.4);
+            transform: translateY(-2px);
+        }
+        .rating-button i { font-size: 1.1rem; }
 
         .status-message {
             font-size: 1.2rem;
@@ -267,123 +244,53 @@
             border-radius: 16px;
         }
 
-        /* --- NUEVO: TARJETA DE RATINGS (El widget de la derecha) --- */
-        .ratings-card {
-            width: 30%; /* Ocupa el espacio restante */
-            background-color: var(--bg-card);
-            border-radius: 16px;
+        /* --- ESTILOS DE TENDENCIAS --- */
+        #trending-section {
+            width: 100%; max-width: 900px;
+            margin: 0 auto 3rem auto;
+            opacity: 1; transition: opacity 0.3s ease-out, height 0.3s ease-out;
+            height: auto; overflow: hidden;
+        }
+        #trending-section.hidden { opacity: 0; height: 0; margin-bottom: 0; }
+        #trending-section h2 {
+            font-size: 1.5rem; color: var(--accent-light);
+            margin-bottom: 1.5rem; padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        #trending-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1.5rem;
+        }
+        .trending-card {
+            border-radius: 12px; overflow: hidden;
+            cursor: pointer; transition: all 0.3s ease;
             border: 1px solid var(--border-color);
-            box-shadow: 0 0 25px rgba(169, 85, 247, 0.1);
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center; /* Centra el contenido verticalmente */
-            text-align: center;
+            box-shadow: 0 0 15px rgba(169, 85, 247, 0.1);
         }
-
-        .ratings-card h4 {
-            font-size: 1rem;
-            color: var(--accent-light);
-            margin-bottom: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* Círculo de Puntuación TMDB */
-        .score-circle {
-            width: 80px; /* Más grande */
-            height: 80px; /* Más grande */
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            margin-bottom: 1rem;
-        }
-        .score-circle::before {
-            content: '';
-            position: absolute;
-            width: 65px; /* Círculo interior más grande */
-            height: 65px;
-            background-color: var(--bg-card);
-            border-radius: 50%;
-        }
-        .score-text {
-            position: relative;
-            z-index: 1;
-            font-size: 1.5rem; /* Texto más grande */
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-        .vote-count {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
-        }
-
-        /* Botones de IMDB y Rotten Tomatoes */
-        .rating-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-            width: 100%;
-            max-width: 180px; /* Límite de ancho para los botones */
-        }
-        .rating-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.8rem 1rem;
-            background-color: var(--border-color);
-            color: var(--text-primary);
-            border: none;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            text-decoration: none; /* Para enlaces */
-            transition: all 0.2s ease;
-            gap: 0.5rem;
-        }
-        .rating-button:hover {
-            background-color: var(--accent-purple);
-            box-shadow: 0 0 15px rgba(169, 85, 247, 0.4);
-            transform: translateY(-2px);
-        }
-        .rating-button i {
-            font-size: 1.1rem;
+        .trending-card img { width: 100%; height: auto; display: block; }
+        .trending-card:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 5px 25px rgba(169, 85, 247, 0.3);
+            border-color: var(--accent-purple);
         }
 
         /* --- Diseño Responsive --- */
-        @media (max-width: 900px) { /* Punto de quiebre para apilar las tarjetas */
-            .result-wrapper {
-                flex-direction: column; /* Apila principal y ratings */
-                gap: 1.5rem;
-                max-width: 650px; /* Se expande un poco más */
-                align-items: center;
+        @media (max-width: 768px) {
+            .result-card {
+                flex-direction: column;
+                max-width: 350px;
+                width: 95%;
             }
-            .result-card, .ratings-card {
-                width: 100%; /* Ocupan todo el ancho */
+            .card-poster img {
+                width: 100%; height: auto;
+                max-height: 500px;
+                border-radius: 16px 16px 0 0;
             }
-            .ratings-card {
-                padding: 1rem; /* Menos padding en móvil */
-                flex-direction: row; /* Contenido en fila */
-                flex-wrap: wrap; /* En caso de que no quepan */
-                justify-content: space-around;
-                align-items: center;
-            }
-            .ratings-card h4 {
-                width: 100%; /* El título ocupa todo el ancho */
-                margin-bottom: 1rem;
-            }
-            .score-circle { margin-bottom: 0; }
-            .vote-count { margin-bottom: 0; margin-left: 1rem; }
+            .card-header h2 { font-size: 1.5rem; }
+
             .rating-buttons {
-                flex-direction: row; /* Botones en fila en móvil */
-                max-width: none;
-                justify-content: center;
-                gap: 0.5rem;
-                margin-top: 1rem;
+                flex-direction: column;
             }
         }
 
@@ -393,25 +300,9 @@
             #search-input { width: 90%; border-radius: 50px; text-align: center; }
             #search-button { width: 90%; border-radius: 50px; margin-left: 0; }
 
-            .result-card { max-width: 320px; width: 95%; }
-            .card-poster img {
-                width: 100%;
-                height: auto;
-                max-height: 450px;
-                border-radius: 16px 16px 0 0;
-            }
-            .card-header h2 { font-size: 1.5rem; }
-            
-            .ratings-card {
-                max-width: 320px;
-                width: 95%;
-                flex-direction: column; /* Vuelven a apilarse en vertical en los móviles más pequeños */
-                gap: 1rem;
-            }
-            .ratings-card h4 { margin-bottom: 0.5rem; }
-            .vote-count { margin-left: 0; }
-            .rating-buttons {
-                flex-direction: column; /* Botones de nuevo en columna */
+            .card-header {
+                flex-wrap: wrap; /* Permite que el score baje si no cabe */
+                gap: 0.5rem;
             }
         }
     </style>
@@ -430,6 +321,12 @@
             </button>
         </section>
 
+        <section id="trending-section">
+            <h2>Tendencias Semanales</h2>
+            <div id="trending-container">
+                </div>
+        </section>
+
         <div id="loading-spinner" class="hidden"></div>
         <section id="results-container"></section>
     </main>
@@ -440,18 +337,21 @@
         const searchButton = document.getElementById('search-button');
         const resultsContainer = document.getElementById('results-container');
         const loadingSpinner = document.getElementById('loading-spinner');
+        const trendingSection = document.getElementById('trending-section');
+        const trendingContainer = document.getElementById('trending-container');
 
         // --- 2. CONFIGURACIÓN DE LA API (TMDB) ---
-        const apiKey = "42b2a8005054ae22354587e86e3b8f1e"; // ¡¡¡IMPORTANTE!!! Pega tu clave API aquí
+        const apiKey = "42b2a8005054ae22354587e86e3b8f1e"; // ¡¡¡IMPORTANTE!!! Pega tu clave API de TMDB aquí
         const apiBaseUrl = "https://api.themoviedb.org/3";
         const posterBaseUrl = "https://image.tmdb.org/t/p/w185";
         const placeholderUrl = "https://via.placeholder.com/185x278?text=No+Poster";
+        // Clave de Giphy eliminada
 
         // --- 3. MAPEO DE ICONOS ---
         const platformIcons = {
-            "Netflix": "fa-solid fa-n", // Letra "N" para evitar bloqueadores
+            "Netflix": "fa-solid fa-n",
             "Amazon Prime Video": "fa-brands fa-amazon-prime-video",
-            "Disney Plus": "fa-solid fa-d", // Letra "D" para evitar bloqueadores
+            "Disney Plus": "fa-solid fa-d",
             "HBO Max": "fa-solid fa-h",
             "Apple TV Plus": "fa-brands fa-apple",
             "Movistar Plus": "fa-solid fa-mobile-screen-button",
@@ -475,41 +375,40 @@
             const query = searchInput.value.trim();
             if (!query) return;
 
+            // Oculta las tendencias y muestra el loading
+            trendingSection.classList.add('hidden');
             resultsContainer.innerHTML = '';
             loadingSpinner.classList.remove('hidden');
 
             try {
                 // --- PASO 1: Buscar los títulos ---
                 const searchUrl = `${apiBaseUrl}/search/multi?api_key=${apiKey}&query=${encodeURIComponent(query)}&language=es-ES`;
-                
                 const searchResponse = await fetch(searchUrl);
                 const searchData = await searchResponse.json();
 
-                if (searchData.results.length === 0) {
-                    displayNotFound();
-                    return;
-                }
+                if (searchData.results.length === 0) { displayNotFound(); return; }
 
                 const filteredResults = searchData.results
                     .filter(item => (item.media_type === 'movie' || item.media_type === 'tv') && item.poster_path)
                     .slice(0, 5);
                 
-                if (filteredResults.length === 0) {
-                    displayNotFound("No se encontraron películas o series con póster.");
-                    return;
-                }
+                if (filteredResults.length === 0) { displayNotFound("No se encontraron películas o series con póster."); return; }
 
-                // --- PASO 2: Obtener datos adicionales (providers y external IDs) para CADA resultado ---
+                // --- PASO 2: Obtener datos adicionales (providers y external IDs) ---
                 const detailedPromises = filteredResults.map(async item => {
                     const providersUrl = `${apiBaseUrl}/${item.media_type}/${item.id}/watch/providers?api_key=${apiKey}`;
                     const externalIdsUrl = `${apiBaseUrl}/${item.media_type}/${item.id}/external_ids?api_key=${apiKey}`;
+                    
+                    // Petición a Giphy eliminada
+                    const [providersResponse, externalIdsResponse] = await Promise.all([
+                        fetch(providersUrl),
+                        fetch(externalIdsUrl)
+                    ]);
 
-                    const providersResponse = await fetch(providersUrl);
                     const providersData = await providersResponse.json();
-
-                    const externalIdsResponse = await fetch(externalIdsUrl);
                     const externalIdsData = await externalIdsResponse.json();
                     
+                    // gifUrl eliminado
                     return { item, providersData: providersData.results, externalIdsData };
                 });
 
@@ -519,7 +418,7 @@
                 loadingSpinner.classList.add('hidden');
                 
                 allResultsData.forEach(({ item, providersData, externalIdsData }) => {
-                    displayResult(item, providersData, externalIdsData);
+                    displayResult(item, providersData, externalIdsData); // Llamada sin gifUrl
                 });
 
             } catch (error) {
@@ -528,9 +427,9 @@
             }
         }
 
-        // --- 5. FUNCIÓN PARA MOSTRAR UN RESULTADO COMPLETO ---
+        // --- 5. FUNCIÓN PARA MOSTRAR UN RESULTADO COMPLETO (MODIFICADA) ---
 
-        function displayResult(item, providers, externalIds) {
+        function displayResult(item, providers, externalIds) { // Parámetro gifUrl eliminado
             // --- Extraer información básica ---
             const title = item.title || item.name;
             const releaseDate = item.release_date || item.first_air_date;
@@ -574,43 +473,41 @@
             const imdbUrl = imdbId ? `https://www.imdb.com/title/${imdbId}/` : '#';
             const rtSearchUrl = `https://www.rottentomatoes.com/search?q=${encodeURIComponent(title)} ${year}`;
 
-            // --- Crear el WRAPPER y ambas tarjetas ---
-            const wrapper = document.createElement('div');
-            wrapper.className = 'result-wrapper';
-            
-            // ID único para el círculo de puntuación
+            // --- HTML del GIF eliminado ---
+
+            // --- ID único para el círculo de puntuación ---
             const scoreCircleId = `score-${item.id}`; 
+            
+            // --- Crear la TARJETA ÚNICA ---
+            const card = document.createElement('div');
+            card.className = 'result-card';
 
-            wrapper.innerHTML = `
-                <div class="result-card">
-                    <div class="card-poster">
-                        <img src="${posterPath}" alt="Póster de ${title}">
-                    </div>
-
-                    <div class="card-info">
-                        <div class="card-header">
-                            <h2>${title}</h2>
-                        </div>
-                        
-                        <div class="card-meta">
-                            <span class="year">${year}</span>
-                            <span class="info-badge">${type}</span>
-                        </div>
-                        
-                        <h3>Disponible en (Suscripción):</h3>
-                        <div class="platforms">
-                            ${platformsHtml}
-                        </div>
-                    </div>
+            card.innerHTML = `
+                <div class="card-poster">
+                    <img src="${posterPath}" alt="Póster de ${title}">
                 </div>
 
-                <div class="ratings-card">
-                    <h4>Calificaciones</h4>
-                    <div class="score-circle" id="${scoreCircleId}">
-                        <span class="score-text">${scorePercent}%</span>
+                <div class="card-info">
+                    
+                    <div class="card-header">
+                        <h2>${title}</h2>
+                        <div class="score-circle" id="${scoreCircleId}">
+                            <span class="score-text">${scorePercent}%</span>
+                        </div>
                     </div>
-                    <p class="vote-count">${voteCount}</p>
+                    
+                    <div class="card-meta">
+                        <span class="year">${year}</span>
+                        <span class="info-badge">${type}</span>
+                    </div>
 
+                    <p class="vote-count">${voteCount}</p>
+                    
+                    <h3>Disponible en (Suscripción):</h3>
+                    <div class="platforms">
+                        ${platformsHtml}
+                    </div>
+                    
                     <div class="rating-buttons">
                         <a href="${imdbUrl}" target="_blank" class="rating-button ${!imdbId ? 'disabled' : ''}" ${!imdbId ? 'onclick="return false;" title="No disponible IMDB ID"' : ''}>
                             <i class="fa-brands fa-imdb"></i> IMDB
@@ -619,10 +516,11 @@
                             <i class="fa-solid fa-tomato"></i> Rotten Tomatoes
                         </a>
                     </div>
+
                 </div>
             `;
             
-            resultsContainer.appendChild(wrapper);
+            resultsContainer.appendChild(card);
 
             // --- Aplicar el gradiente al círculo de puntuación ---
             const scoreCircle = document.getElementById(scoreCircleId);
@@ -640,18 +538,62 @@
             loadingSpinner.classList.add('hidden');
             resultsContainer.innerHTML = `<p class="status-message">${message}</p>`;
         }
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                .then(registration => {
-                    console.log('Service Worker registrado exitosamente:', registration);
-                })
-                .catch(error => {
-                    console.log('Error en el registro del Service Worker:', error);
-                });
-            });
+        
+        // --- FUNCIONES DE TENDENCIAS ---
+        async function loadTrending() {
+            try {
+                const trendingUrl = `${apiBaseUrl}/trending/all/week?api_key=${apiKey}&language=es-ES`;
+                const response = await fetch(trendingUrl);
+                const data = await response.json();
+
+                trendingContainer.innerHTML = ''; 
+
+                if (data.results && data.results.length > 0) {
+                    const trendingResults = data.results.slice(0, 12);
+                    trendingResults.forEach(item => {
+                        if (item.media_type !== 'person') {
+                            displayTrendingItem(item);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error("Error al cargar tendencias:", error);
+                trendingContainer.innerHTML = '<p class="status-message" style="background:none;">No se pudieron cargar las tendencias.</p>';
+            }
         }
+
+        function displayTrendingItem(item) {
+            const title = item.title || item.name;
+            const posterPath = item.poster_path
+                ? `https://image.tmdb.org/t/p/w185${item.poster_path}`
+                : placeholderUrl; 
+
+            const card = document.createElement('div');
+            card.className = 'trending-card';
+            card.innerHTML = `<img src="${posterPath}" alt="Póster de ${title}" title="${title}">`;
+
+            card.addEventListener('click', () => {
+                searchInput.value = title;
+                searchButton.click();
+            });
+
+            trendingContainer.appendChild(card);
+        }
+
+        // --- REGISTRO DEL SERVICE WORKER ---
+        if ('serviceWorker' in navigator) {
+          window.addEventListener('load', () => {
+            loadTrending(); 
+            navigator.serviceWorker.register('sw.js')
+              .then(registration => {
+                console.log('Service Worker registrado exitosamente:', registration);
+              })
+              .catch(error => {
+                console.log('Error en el registro del Service Worker:', error);
+              });
+          });
+        }
+
     </script>
 </body>
-
 </html>
